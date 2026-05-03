@@ -1,0 +1,42 @@
+# Squire configuration. Copy to ~/.squire/config.yaml (or run `squire init-config`).
+# Any key you omit will inherit the value from squire.config.DEFAULT_CONFIG.
+
+# The "reader" role handles ask-worker — file reading + summarization.
+reader:
+  provider: groq                       # informational label, used in metrics
+  provider_kind: openai_compatible     # which Provider class to instantiate
+  model: llama-3.3-70b-versatile       # model name passed to the API
+  base_url: https://api.groq.com/openai/v1
+  api_key_env: GROQ_API_KEY            # which env var to read the API key from
+  max_output_tokens: 800
+  temperature: 0
+  max_input_chars: 30000               # soft cap on corpus size; truncates beyond
+  system_prompt: >-
+    You are a precise file-reading worker. Return concise grounded summaries.
+    Cite file paths when relevant. Do not make final architectural decisions.
+
+# The "writer" role handles worker-write — drafting artifacts.
+writer:
+  provider: groq
+  provider_kind: openai_compatible
+  model: llama-3.3-70b-versatile
+  base_url: https://api.groq.com/openai/v1
+  api_key_env: GROQ_API_KEY
+  max_output_tokens: 4096
+  temperature: 0.2
+  max_input_chars: 30000
+  target_policy: tmp_by_default        # write to /tmp/squire-worker/ unless --allow-real-target
+  system_prompt: >-
+    You are a careful drafting worker. Generate complete draft artifacts.
+    Do not claim tests were run. Prefer simple maintainable output.
+
+# Documentation-only thresholds — read by humans/SKILL.md, not enforced by code.
+routing:
+  delegate_file_line_threshold: 400
+  delegate_file_count_threshold: 3
+  min_estimated_savings_tokens: 3000
+
+# Where worker invocations are logged for `worker-stats`.
+monitoring:
+  log_path: ~/.hermes/logs/worker_delegation.jsonl
+  print_metrics: true                  # print metrics to stderr after each call
