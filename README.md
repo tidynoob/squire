@@ -5,7 +5,7 @@
 Faithful packaging of the [Claude Code cheap-coworker pattern](https://www.anthropic.com/engineering/claude-code-best-practices). Works with any agent that can spawn a process — Claude Code, Hermes, Cursor, Aider, plain terminal.
 
 ```bash
-uv pip install git+https://github.com/mitchellgriffin/squire
+uv pip install git+https://github.com/tidynoob/squire
 export GROQ_API_KEY=...
 ask-worker --paths src/auth.py src/middleware.py --question "where is the session check?"
 ```
@@ -30,7 +30,7 @@ Plus `squire <subcommand>` as a unified front door, and `squire init-config` to 
 ## Install
 
 ```bash
-uv pip install git+https://github.com/mitchellgriffin/squire     # or pip install
+uv pip install git+https://github.com/tidynoob/squire     # or pip install
 export GROQ_API_KEY=sk-...
 squire init-config                                                 # writes ~/.squire/config.yaml
 ```
